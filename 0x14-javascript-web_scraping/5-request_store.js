@@ -1,31 +1,12 @@
 #!/usr/bin/node
 
-// Import the built-in Node.js 'fs' module
+// Import the built-in Node.js 'fs' module for file system operations
 const fs = require('fs');
 
-// Import the 'request' module
+// Import the 'request' module for making HTTP GET requests
 const request = require('request');
 
-// Check if the command-line arguments are provided correctly
-if (process.argv.length !== 4) {
-  console.error('Usage: ./script.js <url> <filename>');
-  process.exit(1);
-}
-
-// Extract URL and filename from command-line arguments
-const url = process.argv[2];
-const filename = process.argv[3];
-
-// Use the 'request' module to perform an HTTP GET request to the URL
-request(url)
-  // Pipe the response directly to a file using the 'fs' module
-  .pipe(fs.createWriteStream(filename))
-  // Handle errors during the request
-  .on('error', (error) => {
-    console.error('Error:', error);
-  })
-  // Notify the user when the download is complete
-  .on('finish', () => {
-    console.log(`File '${filename}' downloaded successfully.`);
-  });
+// Use the 'request' module to perform an HTTP GET request to the URL provided as the first command-line argument
+// The response is piped directly to a file using the 'fs' module's createWriteStream method, with the filename provided as the second command-line argument
+request(process.argv[2]).pipe(fs.createWriteStream(process.argv[3]));
 
